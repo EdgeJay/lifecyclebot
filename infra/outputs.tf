@@ -6,3 +6,7 @@ output "telegram_bot_api_url" {
 output "telegram_bot_app_version" {
     value = aws_lambda_function.lambda_telegram_func.environment[0].variables.app_version
 }
+
+output "telegram_bot_token" {
+    value = var.telegram_bot_token
+}

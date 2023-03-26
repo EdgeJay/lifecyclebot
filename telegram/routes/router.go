@@ -1,11 +1,11 @@
 package routes
 
 import (
+	"log"
 	"net/http"
 
+	"github.com/EdgeJay/lifecyclebot/telegram/env"
 	"github.com/gin-gonic/gin"
-	// "github.com/EdgeJay/lifecyclebot/telegram/env"
-	// awsUtils "github.com/EdgeJay/lifecyclebot/utils/aws"
 )
 
 func NewRouter() *gin.Engine {
@@ -16,10 +16,15 @@ func NewRouter() *gin.Engine {
 		ctx.JSON(http.StatusOK,
 			gin.H{
 				"status": "ok",
-				// "bot_token": awsUtils.GetStringParameter(env.GetAWSParamStoreKeyName("telegram_bot_token"), ""),
 			},
 		)
 	})
+
+	botToken, err := env.GetTelegramBotToken()
+	if err != nil {
+		log.Fatalln(err)
+	}
+	router.POST("/bot"+botToken, Webhook)
 
 	return router
 }
