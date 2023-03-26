@@ -8,6 +8,7 @@ resource "aws_lambda_function" "lambda_telegram_func" {
 
   environment {
     variables = {
+      app_name                     = var.app_name
       app_env                      = var.app_env
       app_version                  = "${var.app_base_version}-${random_id.app_version_suffix.hex}"
       # app_version_secret           = var.app_version_secret
