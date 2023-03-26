@@ -2,6 +2,7 @@ package bot
 
 import (
 	"log"
+	"net/http"
 
 	"github.com/EdgeJay/lifecyclebot/telegram/env"
 	lambdaUtils "github.com/EdgeJay/lifecyclebot/utils/lambda"
@@ -44,8 +45,26 @@ func initBot(token string) {
 	}
 }
 
+// Get singleton instance of TelegramBot
 func GetTelegramBot() *TelegramBot {
 	return tgBot
+}
+
+func (b *TelegramBot) GetBot() *tgbotapi.BotAPI {
+	return b.bot
+}
+
+func (b *TelegramBot) HandleUpdate(r *http.Request) (*tgbotapi.Update, error) {
+	return b.bot.HandleUpdate(r)
+}
+
+func (b *TelegramBot) SendTextMessage(chatID int64, text string) (tgbotapi.Message, error) {
+	msg := tgbotapi.NewMessage(chatID, text)
+	return b.bot.Send(msg)
+}
+
+func GetChatIDFromUpdate(update *tgbotapi.Update) int64 {
+	return update.Message.Chat.ID
 }
 
 // This method is meant to be called only in deployment environment, in post-deployment stage.
