@@ -21,6 +21,7 @@ provider "aws" {
 
 locals {
   app_id = "${lower(var.app_name)}-${lower(var.app_env)}"
+  account_id = data.aws_caller_identity.current.account_id
 }
 
 resource "random_id" "app_version_suffix" {

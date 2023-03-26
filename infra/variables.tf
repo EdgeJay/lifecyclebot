@@ -2,10 +2,6 @@ variable "region" {
   description = "AWS region"
 }
 
-variable "prefix" {
-  description = "Environment prefix for resource names"
-}
-
 variable "app_name" {
   description = "Application name"
 }
@@ -16,6 +12,10 @@ variable "app_env" {
 
 variable "app_base_version" {
   description = "Application base version"
+}
+
+variable "telegram_bot_token" {
+  description = "Token for Telegram bot"
 }
 
 # Attach role to Managed Policy

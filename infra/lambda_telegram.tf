@@ -41,7 +41,6 @@ EOF
 
 }
 
-/*
 data "aws_iam_policy_document" "lambda_telegram_ssm_policy_document" {
   statement {
     effect  = "Allow"
@@ -52,15 +51,7 @@ data "aws_iam_policy_document" "lambda_telegram_ssm_policy_document" {
     ]
 
     resources = [
-      "${aws_ssm_parameter.dev_params.arn}",
-      "${aws_ssm_parameter.dev_dbx_app_key.arn}",
-      "${aws_ssm_parameter.dev_dbx_app_secret.arn}",
-      "${aws_ssm_parameter.dev_dbx_refresh_token.arn}",
-      "${aws_ssm_parameter.dev_openai_api_key.arn}",
-      "${aws_ssm_parameter.dev_rsa_private.arn}",
-      "${aws_ssm_parameter.dev_rsa_public.arn}",
-      "${aws_ssm_parameter.dev_init_token_secret.arn}",
-      "${aws_ssm_parameter.dev_config_admins.arn}"
+      "arn:aws:ssm:${var.region}:${local.account_id}:parameter/${var.app_name}/${var.app_env}/*"
     ]
   }
 
@@ -71,28 +62,25 @@ data "aws_iam_policy_document" "lambda_telegram_ssm_policy_document" {
     ]
 
     resources = [
-      "arn:aws:kms:ap-southeast-1:818374272882:key/1a7ea267-43ae-40cc-8ead-8e26a0d63149"
+      "${data.aws_kms_key.ssm_key.arn}"
     ]
   }
 }
 
 resource "aws_iam_policy" "lambda_telegram_ssm_policy" {
-  name   = "PSGNaviBotLambdaSSMPolicy"
+  name   = "policy-${local.app_id}-lambda-telegram-ssm"
   policy = data.aws_iam_policy_document.lambda_telegram_ssm_policy_document.json
 }
-*/
 
 resource "aws_iam_policy_attachment" "role_attach" {
-  name       = "policy-${local.app_id}"
+  name       = "policy-role-attach-${local.app_id}"
   roles      = [aws_iam_role.lambda_telegram_exec.id]
   count      = length(var.iam_policy_arn)
   policy_arn = element(var.iam_policy_arn, count.index)
 }
 
-/*
 resource "aws_iam_policy_attachment" "custom_policy_attach" {
-  name       = "custom-policy-${local.app_id}"
+  name       = "custom-policy-attach-${local.app_id}-lambda-telegram-ssm"
   roles      = [aws_iam_role.lambda_telegram_exec.id]
   policy_arn = aws_iam_policy.lambda_telegram_ssm_policy.arn
 }
-*/
