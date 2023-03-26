@@ -13,6 +13,7 @@ type InputFlags struct {
 func parseFlags() InputFlags {
 	flags := InputFlags{}
 	flag.StringVar(&flags.WebhookUrl, "w", "", "webhook url")
+	flag.Parse()
 
 	if flags.WebhookUrl == "" {
 		log.Fatalln("missing w flag")

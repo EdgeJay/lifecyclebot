@@ -24,4 +24,4 @@ tg-apply-dev:
 	@make tg-post-deploy
 
 tg-post-deploy:
-	@go run ./deploy -w="`terraform -chdir=infra output -raw api_url`"
+	@go run ./deploy -w="`terraform -chdir=infra output -raw telegram_bot_api_url`"
