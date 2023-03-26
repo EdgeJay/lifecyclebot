@@ -20,6 +20,10 @@ func GetAppEnv() string {
 	return os.Getenv("app_env")
 }
 
+func IsProductionEnv() bool {
+	return GetAppEnv() == "prod"
+}
+
 func GetAppVersion() string {
 	return os.Getenv("app_version")
 }
